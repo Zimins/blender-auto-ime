@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# PyInstaller / 빌드 산출물
+build/
+dist/
+.build-venv/
+*.app
+
+# venv
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# 잡 파일(오배치된 promptbook 업데이트 메시지)
+/CON

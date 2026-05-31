@@ -1,0 +1,52 @@
+name: build-macos
+
+on:
+  workflow_dispatch:        # 수동 실행
+  push:
+    tags:
+      - "v*"                # v0.2.0 처럼 태그 푸시 시 릴리스 빌드
+
+permissions:
+  contents: write           # 릴리스에 에셋 업로드
+
+jobs:
+  build:
+    runs-on: macos-14       # Apple Silicon 러너
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: |
+          python -m pip install --upgrade pip
+          pip install "pyinstaller>=6.0" "rumps>=0.4.0"
+
+      - name: .app 빌드
+        run: pyinstaller --noconfirm packaging/KoFocusSwitch.spec
+
+      - name: zip 패키징
+        run: |
+          cd dist
+          ditto -c -k --sequesterRsrc --keepParent "KO Focus Switch.app" "KO-Focus-Switch-macos.zip"
+
+      - name: 아티팩트 업로드 (모든 실행)
+        uses: actions/upload-artifact@v4
+        with:
+          name: KO-Focus-Switch-macos
+          path: dist/KO-Focus-Switch-macos.zip
+
+      - name: 릴리스에 첨부 (태그 푸시 시)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/KO-Focus-Switch-macos.zip
+          body: |
+            ## 설치
+            1. `KO-Focus-Switch-macos.zip` 다운로드 → 압축 해제
+            2. `KO Focus Switch.app` 을 **우클릭 → 열기** (서명/공증 안 된 빌드라 첫 실행만 이렇게)
+            3. 메뉴바 ⌨︎ 아이콘에서 켜기/끄기·자동 실행 제어
+
+            Blender 진입 시 영문, 이탈 시 원래 입력기로 복원합니다.

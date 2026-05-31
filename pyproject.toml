@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blender-ko-focus-switch"
+version = "0.2.0"
+description = "앱 포커스에 따라 입력 소스를 바꾸는 OS 레벨 데몬/메뉴바 앱 — 한글 IME에서도 Blender 단축키가 동작하게 (macOS)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "blender-ko" }]
+keywords = ["blender", "macos", "input-source", "ime", "korean", "hangul", "menubar"]
+classifiers = [
+    "Environment :: MacOS X",
+    "Operating System :: MacOS :: MacOS X",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+# 코어 CLI/데몬은 외부 의존성 0 (표준 라이브러리 + ctypes). 의존성 없음.
+dependencies = []
+
+[project.optional-dependencies]
+# 메뉴바(GUI) 버전에만 필요. (.app 빌드 시 PyInstaller 가 함께 번들)
+menubar = ["rumps>=0.4.0"]
+build = ["pyinstaller>=6.0", "rumps>=0.4.0"]
+
+[project.scripts]
+ko-focus-switch = "ko_focus_switch:cli_entry"
+
+[project.gui-scripts]
+ko-focus-switch-menubar = "menubar_app:main"
+
+[tool.setuptools]
+py-modules = ["ko_focus_switch", "menubar_app"]
