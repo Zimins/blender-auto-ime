@@ -43,6 +43,10 @@ def _friendly_source(sid):
         return "한글(2벌식)"
     if "inputmethod.Korean" in sid:
         return "한글"
+    if "Kotoeri" in sid or "Japanese" in sid:
+        return "일본어"
+    if "SCIM" in sid or "TCIM" in sid or "TYIM" in sid or "Pinyin" in sid:
+        return "중국어"
     return sid.rsplit(".", 1)[-1]
 
 

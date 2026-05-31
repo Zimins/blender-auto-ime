@@ -5,7 +5,7 @@
 import os
 
 ROOT = os.path.abspath(os.path.join(SPECPATH, ".."))
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 a = Analysis(
     [os.path.join(ROOT, "menubar_app.py")],
